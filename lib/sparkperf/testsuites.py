@@ -127,9 +127,9 @@ class JVMPerfTestSuite(PerfTestSuite):
     def get_spark_submit_cmd(cls, cluster, config, main_class_or_script, opt_list, stdout_filename,
                              stderr_filename):
         spark_submit = "%s/bin/spark-submit" % cluster.spark_home
-        cmd = "%s --class %s --master %s --driver-memory %s %s %s 1>> %s 2>> %s" % (
+        cmd = "%s --class %s --master %s --driver-memory %s %s %s %s 1>> %s 2>> %s" % (
             spark_submit, main_class_or_script, config.SPARK_CLUSTER_URL,
-            config.SPARK_DRIVER_MEMORY, cls.test_jar_path, " ".join(opt_list),
+            config.SPARK_DRIVER_MEMORY, config.SPARK_SUBMIT_EXTRA_ARGS, cls.test_jar_path, " ".join(opt_list),
             stdout_filename, stderr_filename)
         return cmd
 

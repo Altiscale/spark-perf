@@ -143,7 +143,11 @@ COMMON_JAVA_OPTS = [
     # Fraction of JVM memory used for caching RDDs.
     JavaOptionSet("spark.storage.memoryFraction", [0.66]),
     JavaOptionSet("spark.serializer", ["org.apache.spark.serializer.JavaSerializer"]),
-    JavaOptionSet("spark.executor.memory", ["2g"]),
+    JavaOptionSet("spark.executor.memory", ["8g"]),
+    # JavaOptionSet("spark.dynamicAllocation.enabled", [True]),
+    # JavaOptionSet("spark.dynamicAllocation.minExecutors", [8]),
+    # JavaOptionSet("spark.dynamicAllocation.maxExecutors", [16]),
+    # JavaOptionSet("spark.shuffle.service.enabled", [True]),
     # Turn event logging on in order better diagnose failed tests. Off by default as it crashes
     # releases prior to 1.0.2
     # JavaOptionSet("spark.eventLog.enabled", [True]),
@@ -151,7 +155,18 @@ COMMON_JAVA_OPTS = [
     JavaOptionSet("spark.locality.wait", [str(60 * 1000 * 1000)])
 ]
 # Set driver memory here
-SPARK_DRIVER_MEMORY = "1g"
+SPARK_DRIVER_MEMORY = "8g"
+
+# Set extra spark-submit args here
+# YARN-only:
+#  --driver-cores NUM          Number of cores used by the driver, only in cluster mode 
+#                              (Default: 1).
+#  --executor-cores NUM        Number of cores per executor (Default: 1).
+#  --queue QUEUE_NAME          The YARN queue to submit to (Default: "default").
+#  --num-executors NUM         Number of executors to launch (Default: 2).
+
+SPARK_SUBMIT_EXTRA_ARGS = "--deploy-mode cluster --executor-cores 1 --num-executors 8"
+
 # The following options value sets are shared among all tests.
 COMMON_OPTS = [
     # How many times to run each experiment - used to warm up system caches.
@@ -314,7 +329,7 @@ STREAMING_COMMON_JAVA_OPTS = [
     # Fraction of JVM memory used for caching RDDs.
     JavaOptionSet("spark.storage.memoryFraction", [0.66]),
     JavaOptionSet("spark.serializer", ["org.apache.spark.serializer.JavaSerializer"]),
-    JavaOptionSet("spark.executor.memory", ["2g"]),
+    JavaOptionSet("spark.executor.memory", ["8g"]),
     JavaOptionSet("spark.executor.extraJavaOptions", [" -XX:+UseConcMarkSweepGC "])
 ]
 
@@ -442,7 +457,7 @@ MLLIB_CLASSIFICATION_TEST_OPTS = MLLIB_GLM_TEST_OPTS + [
 # GLM Classification Tests #
 MLLIB_GLM_CLASSIFICATION_TEST_OPTS = MLLIB_CLASSIFICATION_TEST_OPTS + [
     # Loss to minimize: logistic, hinge (SVM)
-    OptionSet("loss", ["logistic", "hinge"])
+    OptionSet("loss", ["hinge"])
 ]
 
 MLLIB_TESTS += [("glm-classification", "mllib.perf." + MLLIB_SPARK_VERSION_STR + ".TestRunner", SCALE_FACTOR,
