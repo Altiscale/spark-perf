@@ -155,17 +155,8 @@ COMMON_JAVA_OPTS = [
     JavaOptionSet("spark.locality.wait", [str(60 * 1000 * 1000)])
 ]
 # Set driver memory here
-SPARK_DRIVER_MEMORY = "8g"
-
-# Set extra spark-submit args here
-# YARN-only:
-#  --driver-cores NUM          Number of cores used by the driver, only in cluster mode 
-#                              (Default: 1).
-#  --executor-cores NUM        Number of cores per executor (Default: 1).
-#  --queue QUEUE_NAME          The YARN queue to submit to (Default: "default").
-#  --num-executors NUM         Number of executors to launch (Default: 2).
-
-SPARK_SUBMIT_EXTRA_ARGS = "--deploy-mode cluster --executor-cores 1 --num-executors 8"
+SPARK_DRIVER_MEMORY = "16g"
+SPARK_SUBMIT_EXTRA_ARGS = "--deploy-mode client --executor-cores 4 --num-executors 32"
 
 # The following options value sets are shared among all tests.
 COMMON_OPTS = [
