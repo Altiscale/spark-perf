@@ -144,6 +144,7 @@ COMMON_JAVA_OPTS = [
     JavaOptionSet("spark.storage.memoryFraction", [0.66]),
     JavaOptionSet("spark.serializer", ["org.apache.spark.serializer.JavaSerializer"]),
     JavaOptionSet("spark.executor.memory", ["8g"]),
+    JavaOptionSet("spark.yarn.executor.memoryOverhead", [2048]),
     # JavaOptionSet("spark.dynamicAllocation.enabled", [True]),
     # JavaOptionSet("spark.dynamicAllocation.minExecutors", [8]),
     # JavaOptionSet("spark.dynamicAllocation.maxExecutors", [16]),
