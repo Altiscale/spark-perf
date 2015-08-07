@@ -142,7 +142,7 @@ IGNORED_TRIALS = 2
 COMMON_JAVA_OPTS = [
     # Fraction of JVM memory used for caching RDDs.
     JavaOptionSet("spark.storage.memoryFraction", [0.66]),
-    JavaOptionSet("spark.serializer", ["org.apache.spark.serializer.JavaSerializer"]),
+    JavaOptionSet("spark.serializer", ["org.apache.spark.serializer.KryoSerializer"]),
     JavaOptionSet("spark.executor.memory", ["5g"]),
     JavaOptionSet("spark.yarn.executor.memoryOverhead", [2548]),
     # JavaOptionSet("spark.dynamicAllocation.enabled", [True]),
@@ -320,7 +320,7 @@ STREAMING_COMMON_OPTS = [
 STREAMING_COMMON_JAVA_OPTS = [
     # Fraction of JVM memory used for caching RDDs.
     JavaOptionSet("spark.storage.memoryFraction", [0.66]),
-    JavaOptionSet("spark.serializer", ["org.apache.spark.serializer.JavaSerializer"]),
+    JavaOptionSet("spark.serializer", ["org.apache.spark.serializer.KryoSerializer"]),
     JavaOptionSet("spark.executor.memory", ["8g"]),
     JavaOptionSet("spark.executor.extraJavaOptions", [" -XX:+UseConcMarkSweepGC "])
 ]
@@ -449,7 +449,7 @@ MLLIB_CLASSIFICATION_TEST_OPTS = MLLIB_GLM_TEST_OPTS + [
 # GLM Classification Tests #
 MLLIB_GLM_CLASSIFICATION_TEST_OPTS = MLLIB_CLASSIFICATION_TEST_OPTS + [
     # Loss to minimize: logistic, hinge (SVM)
-    OptionSet("loss", ["hinge"])
+    OptionSet("loss", ["logistic", "hinge"])
 ]
 
 MLLIB_TESTS += [("glm-classification", "mllib.perf." + MLLIB_SPARK_VERSION_STR + ".TestRunner", SCALE_FACTOR,
@@ -598,7 +598,7 @@ MLLIB_CHI_SQ_GOF_TEST_OPTS = MLLIB_STATS_TEST_OPTS + \
                               OptionSet("num-cols", [0], can_scale=True)]
 
 MLLIB_CHI_SQ_MAT_TEST_OPTS = MLLIB_STATS_TEST_OPTS + \
-                             [OptionSet("num-rows", [2000], can_scale=True),
+                             [OptionSet("num-rows", [20000], can_scale=True),
                               OptionSet("num-cols", [0], can_scale=True)]
 
 if MLLIB_SPARK_VERSION >= 1.1:
