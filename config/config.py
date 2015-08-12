@@ -73,7 +73,7 @@ RESTART_SPARK_CLUSTER = False
 RESTART_SPARK_CLUSTER = RESTART_SPARK_CLUSTER and not IS_YARN_MODE
 
 # Rsync SPARK_HOME to all the slaves or not
-RSYNC_SPARK_HOME = True
+RSYNC_SPARK_HOME = False
 
 # Which tests to run
 RUN_SPARK_TESTS = True
@@ -144,7 +144,7 @@ COMMON_JAVA_OPTS = [
     JavaOptionSet("spark.storage.memoryFraction", [0.66]),
     # JavaOptionSet("spark.serializer", ["org.apache.spark.serializer.JavaSerializer"]),
     JavaOptionSet("spark.serializer", ["org.apache.spark.serializer.KryoSerializer"]),
-    JavaOptionSet("spark.executor.memory", ["5g"]),
+    JavaOptionSet("spark.executor.memory", ["8g"]),
     JavaOptionSet("spark.yarn.executor.memoryOverhead", [2548]),
     # JavaOptionSet("spark.dynamicAllocation.enabled", [True]),
     # JavaOptionSet("spark.dynamicAllocation.minExecutors", [8]),
@@ -321,7 +321,7 @@ STREAMING_COMMON_JAVA_OPTS = [
     # Fraction of JVM memory used for caching RDDs.
     JavaOptionSet("spark.storage.memoryFraction", [0.66]),
     JavaOptionSet("spark.serializer", ["org.apache.spark.serializer.KryoSerializer"]),
-    JavaOptionSet("spark.executor.memory", ["8g"]),
+    # JavaOptionSet("spark.executor.memory", ["9g"]),
     JavaOptionSet("spark.executor.extraJavaOptions", [" -XX:+UseConcMarkSweepGC "])
 ]
 
@@ -507,9 +507,15 @@ MLLIB_DECISION_TREE_TEST_OPTS = MLLIB_COMMON_OPTS + [
 ]
 
 if MLLIB_SPARK_VERSION >= 1.2:
+    ensembleTypes = ["RandomForest"]
+    if MLLIB_SPARK_VERSION >= 1.3:
+        ensembleTypes.append("GradientBoostedTrees")
+    if MLLIB_SPARK_VERSION >= 1.4:
+        ensembleTypes.extend(["ml.RandomForest", "ml.GradientBoostedTrees"])
     MLLIB_DECISION_TREE_TEST_OPTS += [
-        # Ensemble type: RandomForest, GradientBoostedTrees
-        OptionSet("ensemble-type", ["RandomForest", "GradientBoostedTrees"]),
+        # Ensemble type: mllib.RandomForest, mllib.GradientBoostedTrees,
+        #                ml.RandomForest, ml.GradientBoostedTrees
+        OptionSet("ensemble-type", ensembleTypes),
         # Path to training dataset (if not given, use random data).
         OptionSet("training-data", [""]),
         # Path to test dataset (only used if training dataset given).
@@ -696,6 +702,20 @@ MLLIB_FP_GROWTH_TEST_OPTS = MLLIB_FPM_TEST_OPTS + \
 if MLLIB_SPARK_VERSION >= 1.3:
     MLLIB_TESTS += [("fp-growth", MLLIB_PERF_TEST_RUNNER, SCALE_FACTOR,
         MLLIB_JAVA_OPTS, [ConstantOption("fp-growth")] + MLLIB_FP_GROWTH_TEST_OPTS)]
+
+# TODO: tune test size to have runtime within 30-60 seconds
+MLLIB_PREFIX_SPAN_TEST_OPTS = MLLIB_FPM_TEST_OPTS + \
+                            [OptionSet("num-sequences", [5000000], can_scale=True),
+                             OptionSet("avg-sequence-size", [5], can_scale=False),
+                             OptionSet("avg-itemset-size", [1], can_scale=False),
+                             OptionSet("num-items", [100], can_scale=False),
+                             OptionSet("min-support", [0.5], can_scale=False),
+                             OptionSet("max-pattern-len", [10], can_scale=False),
+                             OptionSet("max-local-proj-db-size", [32000000], can_scale=False)]
+
+if MLLIB_SPARK_VERSION >= 1.5:
+    MLLIB_TESTS += [("prefix-span", MLLIB_PERF_TEST_RUNNER, SCALE_FACTOR,
+        MLLIB_JAVA_OPTS, [ConstantOption("prefix-span")] + MLLIB_PREFIX_SPAN_TEST_OPTS)]
 
 # Python MLlib tests
 PYTHON_MLLIB_TESTS = []
