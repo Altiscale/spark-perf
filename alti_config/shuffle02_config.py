@@ -144,8 +144,8 @@ COMMON_JAVA_OPTS = [
     JavaOptionSet("spark.storage.memoryFraction", [0.66]),
     # JavaOptionSet("spark.serializer", ["org.apache.spark.serializer.JavaSerializer"]),
     JavaOptionSet("spark.serializer", ["org.apache.spark.serializer.KryoSerializer"]),
-    JavaOptionSet("spark.executor.memory", ["8g"]),
-    JavaOptionSet("spark.yarn.executor.memoryOverhead", [2048]),
+    JavaOptionSet("spark.executor.memory", ["24g"]),
+    JavaOptionSet("spark.yarn.executor.memoryOverhead", [6144]),
     JavaOptionSet("spark.shuffle.compress", [True]),
     JavaOptionSet("spark.shuffle.spill.compress", [True]),
     JavaOptionSet("spark.shuffle.io.numConnectionsPerPeer", [4]),
@@ -162,7 +162,7 @@ COMMON_JAVA_OPTS = [
 ]
 # Set driver memory here
 SPARK_DRIVER_MEMORY = "4g"
-SPARK_SUBMIT_EXTRA_ARGS = "--deploy-mode client --executor-cores 1 --num-executors 12"
+SPARK_SUBMIT_EXTRA_ARGS = "--deploy-mode client --executor-cores 1 --num-executors 24"
 # The following options value sets are shared among all tests.
 COMMON_OPTS = [
     # How many times to run each experiment - used to warm up system caches.
