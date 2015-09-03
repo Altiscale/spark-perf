@@ -39,6 +39,7 @@ do
   # deploy config
   cp $spark_perf/config/config.py $spark_perf/config/backup.config.py
   echo "ok - applying config from  $curr_dir/$testcase to $spark_perf/config/config.py"
+  echo "ok - applying config from  $curr_dir/$testcase to $spark_perf/config/config.py" >> $log_file
   cp $curr_dir/$testcase $spark_perf/config/config.py
   grep -e JavaOptionSet -e EXTRA -e DRIVER "$curr_dir/$testcase" | tee -a $log_file
   touch $time_file
