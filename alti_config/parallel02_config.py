@@ -162,7 +162,7 @@ COMMON_JAVA_OPTS = [
     JavaOptionSet("spark.locality.wait", [str(60 * 1000 * 1000)])
 ]
 # Set driver memory here
-SPARK_DRIVER_MEMORY = "4g"
+SPARK_DRIVER_MEMORY = "16g"
 SPARK_SUBMIT_EXTRA_ARGS = "--deploy-mode client --executor-cores 1 --num-executors 24"
 # The following options value sets are shared among all tests.
 COMMON_OPTS = [
